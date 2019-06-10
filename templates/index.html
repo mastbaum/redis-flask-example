@@ -1,0 +1,37 @@
+<!doctype html>
+<title>Redis Demo</title>
+
+<style>
+.status {
+  font-size: 18pt; color: white; text-align: center; font-weight: bold;
+  height: 50px; width: 50px; border: solid 1px black;
+}
+.status-default { background: gray; }
+.status-off { background: #900; }
+.status-on { background: #090; }
+</style>
+
+<button class="set" value="1">Set ON</button>
+<button class="set" value="0">Set OFF</button>
+
+<p>
+State:
+<div id="statusbox" class="status status-default">?</div>
+</p>
+
+<script langauge="javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script language="javascript">
+$('.set').click(function(e) {
+  $.get('/set/' + $(this).val(), function(data) { console.log(data); });
+});
+
+setInterval(function() {
+  $.getJSON('/query', {'name': 'testfield'}, function(r) {
+    $('#statusbox').text(r.value);
+    css = r.value == '1' ? 'status-on' : 'status-off';
+    $('#statusbox').attr('class', 'status ' + css);
+  })
+}, 1000);
+</script>
+
